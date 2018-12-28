@@ -80,16 +80,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
 // *** start ***
 // On first load, show home view
-// showLoading("#main-content");
-// $ajaxUtils.sendGetRequest(
-//   function (responseText) {
-//     document.querySelector("#main-content")
-//       .innerHTML = responseText;
 showLoading("#main-content");
 $ajaxUtils.sendGetRequest(
   allCategoriesUrl,
-  buildAndShowHomeHTML,
-  }, // ***** <---- TODO: STEP 1: Substitute [...] ******
+  buildAndShowHomeHTML, // ***** <---- TODO: STEP 1: Substitute [...] ******
   true); // Explicitely setting the flag to get JSON from server processed into an object literal
 });
 // *** finish **
@@ -102,14 +96,15 @@ function buildAndShowHomeHTML (categories) {
   $ajaxUtils.sendGetRequest(
     homeHtmlUrl,
     function (homeHtml) {
-        var chosenCategoryShortName = chooseRandomCategory(categoryShort);
-        var homeHtmlToInsertIntoMainPage = insertProperty(homeHtml,
-                     "{{"+"randomCategoryShortName"+"}}",
-                     "'"+chosenCategoryShortName.short_name+"'"
-                     );
-        insertProperty(homeHtml, homeHtmlToInsertIntoMainPage);
+      var chosenCategoryShortName = chooseRandomCategory(categories).short_name;
+      //console.log("chosen category short name " + chosenCategoryShortName);
+      var homeHtmlToInsertIntoMainPage = insertProperty(homeHtml,
+        "randomCategoryShortName",
+        "'"+chosenCategoryShortName+"'");
+      //console.log("homeHtmlToInsertIntoMainPage " + homeHtmlToInsertIntoMainPage);
+      insertHtml("#main-content", homeHtmlToInsertIntoMainPage);
 
-        },
+      },
 
       // TODO: STEP 2: Here, call chooseRandomCategory, passing it retrieved 'categories'
       // Pay attention to what type of data that function returns vs what the chosenCategoryShortName
